@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONFESSIONS </title>
+  
+    <link rel="stylesheet" href="style.css">
+  
+    <style>
+/* --- LOGIN MODAL STYLES --- */
+
+/* Blur Effect on Main Content */
+body.blurry > *:not(#loginModal) {
+filter: blur(5px);
+pointer-events: none; /* Disable interaction with blurred content */
+}
+
+/* Modal Overlay */
+#loginModal {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+display: none; /* Hidden by default, shown by JS */
+justify-content: center;
+align-items: center;
+z-index: 2000; /* Ensure it's above everything */
+}
+
+.login-register-container {
+/* Vibrant glowing gradient */
+background: linear-gradient(45deg, #FF6B6B, #FFD166, #4ECDC4, #1A535C);
+background-size: 400% 400%;
+animation: gradientAnimation 15s ease infinite;
+padding: 20px; /* Slightly smaller padding */
+border-radius: 15px;
+box-shadow: 0 0 40px rgba(0, 255, 255, 0.6); /* Cyan glowing shadow */
+text-align: center;
+width: 80%; /* Set to 90% for mobile */
+max-width: 650px; /* Max width for desktop */
+border: 2px solid rgba(0, 255, 255, 0.8);
+}
+
+@keyframes gradientAnimation {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+
+.form-logo {
+width: 60px;
+height: 60px;
+border-radius: 50%;
+border: 2px solid white;
+margin-bottom: 20px;
+object-fit: cover;
+}
+
+h2.form-title {
+    font-size: 1.2em;
+    line-height: 1.4;
+    color: #ffffff; /* white text */
+    text-shadow: 0 0 5px rgba(0,0,0,0.8); /* add dark shadow for contrast */
+    white-space: normal; /* Ensure text wraps if needed */
+}
+
+/* New Media Query for form title on very small screens */
+@media (max-width: 450px) {
+    h2.form-title {
+        font-size: 1em; /* Reduce font size on small screens */
+    }
+}
+
+
+#welcomeBackMessage {
+color: white;
+font-size: 1.2em;
+margin-bottom: 20px;
+display: none; /* Hide initially */
+}
+
+.input-group {
+display: flex;
+align-items: center;
+margin-bottom: 15px;
+text-align: left;
+}
+
+.input-group label {
+width: 90px;
+font-weight: bold;
+color:#ffffff;
+font-size: 0.9em;
+margin-right: 10px;
+text-shadow: 0 0 3px rgba(0,0,0,0.7);
+}
+
+.input-group input {
+flex-grow: 1;
+padding: 8px 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+background-color: rgba(255, 255, 255, 0.9);
+color: #333;
+outline: none;
+}
+
+.buttons-section {
+display: flex;
+justify-content: space-between;
+margin-top: 30px;
+padding: 0 10px;
+}
+
+.button-group-modal {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.button-group-modal p {
+font-size: 0.8em;
+margin-bottom: 10px;
+color: #333;
+font-weight: bold;
+}
+
+.auth-btn {
+    padding: 10px 15px;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.5); /* slightly dark transparent background for contrast */
+    color: #ffffff; /* white text */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    min-width: 130px;
+}
+
+.auth-btn.active:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+
+.auth-btn:not(.active) {
+opacity: 0.5;
+cursor: not-allowed;
+}
+
+.auth-btn.active:hover {
+background-color: rgba(255, 255, 255, 0.2);
+box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* New Header Styles */
+/* --- REVISED HEADER ACTIONS STYLES --- */
+
+/* The overall container for the right side of the header */
+.header-actions {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-end; /* Align items to the right */
+    
+    /* Position elements relative to the top right */
+    position: absolute; 
+    top: 5px; /* Slightly lower the entire group */
+    right: 0px;
+    z-index: 10; /* Ensure it's above everything */
+    position: absolute; 
+    transition: opacity 0.3s, visibility 0.3s; /* Add transition for smoothness */
+}
+
+.user-menu-container {
+    position: relative;
+    display: flex; /* Use flex to position the icon and the new username label */
+    align-items: center; 
+    margin-right: 3px; 
+    margin-bottom: 5px; 
+    flex-direction: row-reverse; /* <--- ADD THIS to reverse the order */
+}
+
+/* Style for the User Icon (👤) - positioned to the left of the dropdown username */
+.user-icon {
+    font-size: 1.5em; 
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    margin-right: 0; /* Clears any existing margin on the right */
+    margin-left: 10px; /* Separator space between username and icon */
+    flex-shrink: 0; /* <--- CRUCIAL: Icon cannot shrink, remains its set width/height */
+}
+/* Sidebar CSS (where you define #sidebar) */
+.sidebar {
+    /* Set the sidebar to be FIXED to the RIGHT edge of the screen */
+    position: fixed;
+    top: 80px;
+    right: -300px; /* Hides it off-screen to the RIGHT (assuming a 300px width) */
+    width: 300px; /* Ensure you have a defined width */
+    height: calc(100% - 80px);
+    background-color: #333; /* Example background */
+    z-index: 2000; 
+    transition: right 0.3s ease; /* Ensure transition is on 'right' */
+}
+.sidebar.active {
+ right: 0; /* <<< CORRECTED: This makes the sidebar slide in from the right */
+ left: auto; /* <<< ADDED: Ensures no leftover 'left' value interferes */
+z-index: 2001; 
+}
+
+.user-icon:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* New style for the Username Text (placed next to the icon) */
+.current-user-label {
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-shadow: 0 0 3px rgba(0,0,0,0.8);
+    cursor: default;
+    
+    /* === CRITICAL FLEXBOX AND TRUNCATION RULES === */
+    flex-grow: 1;           /* <--- Allows username to take up max available space */
+    min-width: 0;           /* <--- Allows the element to shrink smaller than its content width */
+    overflow: hidden;       /* <--- Hides text that exceeds the box width */
+    white-space: nowrap;    /* <--- Ensures text stays on one line (required for ellipsis) */
+    text-overflow: ellipsis;/* <--- Displays '...' when text is cut off */
+}
+.user-dropdown-content {
+    display: none; 
+    position: absolute; /* Keep this to position it relative to the container */
+    top: 100%;
+    right: 0;
+    margin-top: 5px; 
+    background-color: #ccc;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1001;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.user-dropdown-content a,
+ .dropdown-username { 
+    color: #333;
+     padding: 12px 16px; 
+     text-decoration: none; 
+     display: block; 
+     text-align: left; 
+     font-size: 0.9em;
+     }
+     .user-dropdown-content a:hover
+      { background-color: #76dfd1; 
+    }
+    .dropdown-username {
+         font-weight: bold; 
+         background-color: #76d8e9; 
+         cursor: default; 
+         border-bottom: 1px solid #ccc;
+    }
+    
+/* 2. DISPLAYS the dropdown when the 'show' class is added by JavaScript */
+.user-dropdown-content.show {
+    display: block; /* Change from hidden (none) to visible (block) */
+}
+h2.form-title span {
+  display: block;       /* Makes each span appear on its own line */
+  /* REMOVED: white-space: nowrap; */
+  /* ADDED: Use text-overflow to ensure any overflow is handled gracefully if needed */
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+.form-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-bottom: 20px;
+    object-fit: cover;
+    transition: all 0.3s ease; /* smooth transition */
+}
+
+.form-logo:hover {
+    transform: scale(2.0); /* slightly enlarge */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.6); /* glowing effect */
+}
+.like-btn {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-left: 10px;
+    transition: transform 0.1s;
+}
+/* Modal Button Stack on Mobile */
+@media (max-width: 450px) {
+  .buttons-section {
+    flex-direction: column; /* Stack the two button groups vertically */
+    gap: 20px; /* Add vertical space between the groups */
+  }
+
+  .button-group-modal p {
+      font-size: 0.9em;
+  }
+}
+.confession {
+    position: relative; /* Essential for positioning the like button */
+/*}
+.confession .like-btn {
+    position: absolute; 
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    
+    
+
+</style>
+</head>
+<body>
+  <main>
+    <button id="openRecorderBtn" onclick="showAudioModal()" style="
+        position: fixed;
+        bottom: 18px;
+        right: 18px;
+        z-index: 2000;
+        padding: 12px 20px;
+        background: var(--accent-color); /* Uses your theme's accent color */
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    ">
+        <body>
+  <main>
+    <button id="openRecorderBtn" onclick="showAudioModal()" style="
+        position: fixed;
+        bottom: 18px;
+        right: 18px;
+        z-index: 2000;
+        padding: 12px 20px;
+        background: rgb(7, 154, 165); /* Uses your theme's accent color */
+        color: rgb(255, 255, 255);
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        
+        
+
+    ">
+        🎙️ Record Audio Confession
+    </button>
+    </button>
+  </main>
+
+<body>
+  
+    <div id="loginModal">
+    <div class="login-register-container">
+      <img src="unnamed-removebg-preview.png" alt="Logo" class="form-logo">
+
+      <h2 class="form-title" id="formTitle">
+  <span class="line1">Create your anonymous username & password.</span>
+  <span class="line2">No real personal details.</span>
+</h2>
+      <div id="welcomeBackMessage"></div>
+
+      <div class="input-group" id="usernameGroup">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="e.g. loverbird">
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Maximum 4 characters" maxlength="4">
+
+
+      </div>
+
+      <div class="buttons-section">
+        <div class="button-group-modal">
+          <p id="loginPrompt">If you have account</p>
+          <button class="auth-btn" id="loginBtn" disabled>Log In</button>
+        </div>
+        <div class="button-group-modal" id="createGroup">
+          <p>If you don't have account</p>
+          <button class="auth-btn" id="createBtn" disabled>Create account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <img src="unnamed-removebg-preview.png" alt="Confession Logo" class="logo">
+   <h1> CONFESSIONS</h1>
+    <p>Share your thoughts, stories, and secrets anonymously.</p>
+
+   <div class="header-actions">
+    <div id="userMenuContainer" class="user-menu-container">
+        <span id="userIcon" class="user-icon" onclick="toggleUserMenu()">👤</span>
+        <span id="visibleUsernameLabel" class="current-user-label">Not Signed In</span>
+        
+        <div id="userDropdown" class="user-dropdown-content">
+            <span id="dropdownUsername" class="dropdown-username"></span>
+            <a href="#" id="dropdownLogoutBtn">Log Out</a>
+            <a href="#" id="dropdownDeleteBtn">Delete Account</a>
+        </div>
+    </div>
+</div>
+<div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+    <section class="confession-box">
+      <h2>Post Your Confession Here</h2>
+      <form id="confessionForm">
+        <textarea id="confessionInput" placeholder="Write your confession..."></textarea>
+        <div class="button-group">
+          <button type="submit" id="submitBtn">Submit</button>
+          <button type="button" id="viewBtn">Read Recent Confessions</button>
+        </div>
+      </form>
+    </section>
+  </header>
+
+    <div id="sidebar" class="sidebar">
+    <div class="sidebar-content">
+      <input type="text" placeholder="Search..." class="search-bar">
+
+      <h3>About the Page</h3>
+      <p> Confession is a space where anyone can share their truths, feelings, or secrets — safely and anonymously.</p>
+
+      <h3>Contact Us</h3>
+      <p>Email: confession@gmail.com<br>Instagram: @confession</p>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="confessions-list">
+  <h2 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">🔥 From the Shadows 🔥: 🔥Most Popular Confessions🔥</h2>
+  <div id="topConfessionsList">
+    </div>
+</section>
+  </main>
+
+    <div class="bottom-logo">
+    <img src="unnamed-removebg-preview.png" alt="Confessions Logo" class="footer-logo">
+  </div>
+
+  <footer>
+ <div id="universityModal" style="
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  justify-content: center; align-items: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease;">
+  
+  <div style="
+    background: linear-gradient(145deg, #111827, #1f2937, #374151);
+    color: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    width: 90%; max-width: 420px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    border: 1px solid #00ffff40;">
+    
+    <h3 style="color:#00ffff; margin-bottom:10px;">🎓 Select or Enter University</h3>
+    <p style="opacity:0.8;font-size:0.9em;margin-bottom:15px;">
+      Type your university name below. Suggestions will appear.
+    </p>
+
+    <input type="text" id="uniSearchInput" placeholder="Start typing your university name..." 
+      style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #666;background:#f9f9f9;color:#111;">
+    
+    <div id="uniListContainer" style="
+        position: relative; 
+        max-height: 200px; 
+        overflow-y: auto; 
+        border-radius: 8px; 
+        border: 1px solid #333; 
+        margin-bottom: 15px;
+        text-align: left;
+        display: none;">
+        </div>
+    
+    <button id="confirmUniversityBtn" style="
+      padding:10px 20px;
+      background:#00ffff;
+      color:#000;
+      font-weight:bold;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;">
+      Confirm Confession Post
+    </button>
+  </div>
+</div>
+
+<style>
+/* Add the style for the new dynamic list options */
+.uni-option {
+    padding: 10px;
+    cursor: pointer;
+    background: #2b3341;
+    border-bottom: 1px solid #1f2937;
+    transition: background-color 0.2s;
+    color: #fff;
+}
+.uni-option:hover {
+    background: #374151; /* Slightly lighter on hover */
+}
+.other-option {
+    font-style: italic;
+    color: #ff0066; /* Highlight for custom entry */
+}
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
+}
+</style>
+
+
+    <p>© 2025  Confession | Speak Your Truth</p>
+  </footer>
+
+    <script>
+
+    // Sidebar, Theme, Search, and Confession Submission Logic
+    function toggleMenu() { document.getElementById("sidebar").classList.toggle("active"); }
+    
+    document.addEventListener("click", function(event) {
+      const sidebar = document.getElementById("sidebar");
+      const menuIcon = document.querySelector(".menu-icon");
+      if (
+        sidebar.classList.contains("active") &&
+        !sidebar.contains(event.target) &&
+        !menuIcon.contains(event.target)
+      ) { sidebar.classList.remove("active"); }
+    });
+
+    // Search functionality
+    const searchBar = document.querySelector('.search-bar');
+    const confessions = document.querySelectorAll('.confession');
+    searchBar.addEventListener('input', function() {
+      const searchValue = searchBar.value.toLowerCase().trim();
+      confessions.forEach(confession => {
+        const text = confession.textContent.toLowerCase();
+        // Removed category search logic
+        confession.style.display = (text.includes(searchValue) || searchValue === "")
+          ? "block" : "none";
+      });
+    });
+
+  
+      
+    // --- CATEGORY REMOVAL: The category data and detection functions are removed ---
+
+
+    const confessionInput = document.getElementById("confessionInput");
+    const confessionForm = document.getElementById("confessionForm");
+    const viewBtn = document.getElementById("viewBtn");
+    
+confessionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const text = confessionInput.value.trim();
+  if (text === "") {
+    alert("Please write something before submitting.");
+    return;
+  }
+
+  // Save text temporarily
+  sessionStorage.setItem("pendingConfession", text);
+
+ // *** FIX: Initialize the single input field to be completely clean ***
+  const uniInput = document.getElementById("uniSearchInput");
+  uniInput.value = ""; // Force the input to be empty
+  uniInput.focus();
+  renderUniversityList(""); // Renders an empty list
+
+  document.getElementById("universityModal").style.display = "flex";
+});
+
+
+// === University Selection Logic (MODIFIED) ===
+const uniModal = document.getElementById("universityModal");
+const uniListContainer = document.getElementById("uniListContainer");
+const uniSearchInput = document.getElementById("uniSearchInput"); 
+const confirmUniBtn = document.getElementById("confirmUniversityBtn");
+
+// Define the master list of universities 
+const universityList = [
+    "University of Nairobi", "Kenyatta University", "Moi University", 
+    "Egerton University", "Maseno University", "Masinde Muliro University", 
+    "Technical University of Kenya", "Jomo Kenyatta University of Agriculture and Technology (JKUAT)", 
+    "Chuka University", "Meru University of Science and Technology", "Dedan Kimathi University of Technology (DeKUT)", 
+    "Karatina University", "Kirinyaga University", "Laikipia University", 
+    "South Eastern Kenya University (SEKU)", "University of Eldoret", "Kisii University", 
+    "Pwani University", "Masai Mara University", "Murang’a University of Technology", 
+    "Taita Taveta University", "Tharaka University", "Garissa University", 
+    "Cooperative University of Kenya", "KCA University", "Strathmore University", 
+    "Daystar University", "Mount Kenya University", "Kenya Methodist University", 
+    "Catholic University of Eastern Africa (CUEA)", "United States International University (USIU-Africa)", 
+    "Africa Nazarene University", "Zetech University", "St. Paul’s University", 
+    "Riara University", "Presbyterian University of East Africa", "Pan Africa Christian University (PAC University)", 
+    "Gretsa University", "Great Lakes University of Kisumu", "Adventist University of Africa"
+];
+
+// Function to render the list based on filter
+function renderUniversityList(filter = '') {
+    uniListContainer.innerHTML = ''; // Clear the list
+
+    const lowerFilter = filter.toLowerCase();
+    let matchFound = false;
+
+    // 1. Render all matching universities
+    universityList.forEach(uni => {
+        if (uni.toLowerCase().includes(lowerFilter)) {
+            matchFound = true;
+            const listItem = document.createElement('div');
+            listItem.className = 'uni-option';
+            listItem.textContent = uni;
+            listItem.onclick = () => {
+                uniSearchInput.value = uni;
+                uniListContainer.style.display = 'none'; // Hide list after selection
+            };
+            uniListContainer.appendChild(listItem);
+        }
+    });
+
+    // 2. Add 'Other' option if no match is found, but the user has typed something
+    if (!matchFound && lowerFilter.length > 0) {
+        const otherOption = document.createElement('div');
+        otherOption.className = 'uni-option other-option';
+        // Note: It's important not to change the uniSearchInput.value here
+        otherOption.textContent = `Use: "${filter}" (Custom University)`;
+        // Clicking this just hides the list, accepting the typed custom value
+        otherOption.onclick = () => {
+            uniListContainer.style.display = 'none';
+        };
+        uniListContainer.appendChild(otherOption);
+    }
+    
+    // Show the list if filter has content OR if the input is focused and the list isn't empty
+    if (lowerFilter.length > 0 || uniListContainer.children.length > 0) {
+        uniListContainer.style.display = 'block';
+    } else {
+        uniListContainer.style.display = 'none';
+    }
+}
+
+// Event listener for dynamic filtering
+uniSearchInput.addEventListener("input", () => {
+    renderUniversityList(uniSearchInput.value.trim());
+});
+
+// Event listener to show all options when clicking on an empty input
+uniSearchInput.addEventListener("focus", () => {
+    renderUniversityList(uniSearchInput.value.trim());
+});
+
+// Hide list when clicking outside (on the modal overlay)
+uniModal.addEventListener("click", (e) => {
+  // Check if click is directly on the modal backdrop, not the internal box
+  if (e.target === uniModal) {
+    uniModal.style.display = "none";
+    sessionStorage.removeItem("pendingConfession");
+  }
+});
+
+// Hide list when user clicks anywhere but the input or list
+document.addEventListener("click", (e) => {
+    if (!uniSearchInput.contains(e.target) && !uniListContainer.contains(e.target)) {
+        uniListContainer.style.display = 'none';
+    }
+});
+
+
+confirmUniBtn.addEventListener("click", () => {
+  const text = sessionStorage.getItem("pendingConfession");
+  if (!text) return;
+
+  let selectedUni = uniSearchInput.value.trim();
+  
+  if (selectedUni === "") {
+      return alert("Please enter or select your university.");
+  }
+  
+  // Hide the suggestions list when confirming
+  uniListContainer.style.display = 'none';
+
+  // Create new confession
+  const newConfession = {
+    id: "post-" + Date.now(),
+    text,
+    university: selectedUni, // Use the value from the single input
+    time: new Date().toLocaleString(),
+    likes: 0,
+    lastLiked: 0
+  };
+
+  const allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+  allConfessions.push(newConfession);
+  localStorage.setItem("confessions", JSON.stringify(allConfessions));
+
+  uniModal.style.display = "none";
+  sessionStorage.removeItem("pendingConfession");
+  confessionInput.value = "";
+  alert("Your confession has been posted 🖤");
+  renderTopConfessions();
+window.location.reload();
+  document.getElementById("universityModal").style.display = "flex";
+});
+
+
+
+    
+    // Ensure the view button always links to the single confessions page
+    viewBtn.addEventListener("click", () => { window.location.href = "confessions.html"; });
+    
+  function handleLike(buttonElement, confessionId) {
+    const allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+
+    // Find the post's index in the global list
+    const index = allConfessions.findIndex(c => c.id === confessionId);
+    
+    if (index > -1) {
+        let newLikes = (allConfessions[index].likes || 0) + 1;
+        
+        // 1. INSTANT DOM UPDATE
+        if (buttonElement) {
+            buttonElement.innerHTML = `❤️ ${newLikes} Likes`;
+        }
+
+        // 2. DATA UPDATE and Save
+        allConfessions[index].likes = newLikes; 
+        allConfessions[index].lastLiked = Date.now(); 
+        
+        // Save ONLY to the global list
+        localStorage.setItem("confessions", JSON.stringify(allConfessions));
+        
+        // 3. FULL RE-RENDER (This is important for the trending section)
+        setTimeout(renderTopConfessions, 100); 
+    }
+  }
+
+
+// Removed getCategoryFileName function
+function getFirstSentence(text) {
+    if (!text) return "";
+    
+    // This regex looks for the first occurrence of . ! or ? 
+    // It captures the text up to and including the punctuation mark.
+    const sentenceEndMatch = text.match(/[^.!?]*[.!?]/);
+    
+    // If a sentence is found, return it, otherwise return the whole text.
+    const sentence = sentenceEndMatch ? sentenceEndMatch[0] : text;
+    
+    // Add an ellipsis if the original text was longer than the extracted sentence.
+    const needsEllipsis = sentence.length < text.length;
+    
+    return sentence.trim() + (needsEllipsis ? '...' : '');
+}
+
+// === 🔥 NEW GLOBAL TRENDING SYSTEM (by Likes, with tie-breakers) ===
+function renderTopConfessions() {
+  const topConfessionsList = document.getElementById("topConfessionsList");
+  if (!topConfessionsList) return;
+  topConfessionsList.innerHTML = "";
+
+  // 1. Get ALL Confessions
+  const allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+  
+  if (allConfessions.length === 0) {
+    topConfessionsList.innerHTML = `<p style="opacity:.8">No confessions posted yet 💔</p>`;
+    return;
+  }
+
+  // 2. Sort by Likes (Primary) and lastLiked (Secondary, for tie-breaker)
+  const sortedConfessions = allConfessions.sort((a, b) => {
+    const likesA = a.likes || 0;
+    const likesB = b.likes || 0;
+    
+    if (likesB !== likesA) {
+      return likesB - likesA; // Higher likes first
+    }
+    // Tie-breaker: Newer posts (higher lastLiked timestamp) first
+    return (b.lastLiked || 0) - (a.lastLiked || 0); 
+  }).slice(0, 5); // Show top 5 globally
+
+  let foundTrending = false;
+
+  // 3. Render the top posts
+  sortedConfessions.forEach(post => {
+    // Only show posts with at least 1 like to match the 'Trending' theme
+    if ((post.likes || 0) > 0) { 
+        foundTrending = true;
+        const shortText = post.text.split(" ").slice(0, 25).join(" ");
+        const preview = post.text.length > shortText.length ? `${shortText}...` : post.text;
+
+        const postElement = document.createElement("div");
+        postElement.className = "confession";
+        
+        // Link all to the single confessions.html file
+        postElement.innerHTML = `
+            <a href="confessions.html" class="confession-link">${preview}</a>
+            <span class="category" style="opacity: 0.7;">✨ TRENDING</span> 
+            <button class="like-btn" disabled style="opacity:1;cursor:not-allowed;">
+                ❤️ ${post.likes || 0} Likes
+            </button>
+        `;
+        topConfessionsList.appendChild(postElement);
+    }
+  });
+
+  // If no posts have likes, show a message
+  if (!foundTrending) {
+    // Show the most recent one if nothing is liked
+    const latestPost = allConfessions[allConfessions.length - 1]; // Latest post added is at the end of the array
+    
+    if (latestPost) {
+         const shortText = latestPost.text.split(" ").slice(0, 25).join(" ");
+         const preview = latestPost.text.length > shortText.length ? `${shortText}...` : latestPost.text;
+         topConfessionsList.innerHTML = `
+            <p style="opacity:.8; margin-bottom: 10px;">No trending posts yet 💔. Here's the latest:</p>
+            <div class="confession">
+                <a href="confessions.html" class="confession-link">${preview}</a>
+                <span class="category" style="opacity: 0.7;">🕰️ RECENT</span> 
+                <button class="like-btn" disabled style="opacity:1;cursor:not-allowed;">
+                    ❤️ ${latestPost.likes || 0} Likes
+                </button>
+            </div>
+         `;
+    } else {
+         topConfessionsList.innerHTML = `<p style="opacity:.8">No confessions posted yet 💔</p>`;
+    }
+
+  }
+}
+
+
+
+    // --- AUTHENTICATION JAVASCRIPT (The Modal Logic) ---
+
+    const loginModal = document.getElementById("loginModal");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById('loginBtn');
+    const createBtn = document.getElementById('createBtn');
+   const userMenuContainer = document.getElementById('userMenuContainer');
+const userIcon = document.getElementById('userIcon');
+const userDropdown = document.getElementById('userDropdown');
+const dropdownUsername = document.getElementById('dropdownUsername');
+const dropdownLogoutBtn = document.getElementById('dropdownLogoutBtn');
+const dropdownDeleteBtn = document.getElementById('dropdownDeleteBtn');
+
+    const users = JSON.parse(localStorage.getItem("users")) || {};
+    let currentUser = sessionStorage.getItem("anonymousUser");
+
+
+    function showLoginModal() {
+        // Always reset form inputs to ensure fresh start for log in/create
+        usernameInput.value = '';
+        passwordInput.value = '';
+        loginBtn.disabled = true;
+        createBtn.disabled = true;
+        loginBtn.classList.remove('active');
+        createBtn.classList.remove('active');
+        
+        loginModal.style.display = "flex";
+        document.body.classList.add("blurry");
+        passwordInput.focus();
+    }
+
+    function hideLoginModal() {
+      loginModal.style.display = "none";
+      document.body.classList.remove("blurry");
+    }
+function updateHeaderDisplay() {
+    currentUser = sessionStorage.getItem("anonymousUser");
+    const visibleUsernameLabel = document.getElementById('visibleUsernameLabel'); // Get the new element
+    
+    if (currentUser) {
+        // Logged in: Show user icon and set username in dropdown AND the new visible label
+        userIcon.style.display = 'flex';
+        userIcon.style.backgroundColor = 'rgba(76, 175, 80, 0.4)';
+        dropdownUsername.textContent = `Signed in as: ${currentUser}`;
+        visibleUsernameLabel.textContent = currentUser; // <--- UPDATE 1
+        visibleUsernameLabel.style.cursor = 'pointer';
+        userIcon.onclick = toggleUserMenu;
+        visibleUsernameLabel.onclick = toggleUserMenu; // Allow clicking the name to toggle menu
+        
+    } else {
+        // Logged out: Show log in prompt
+        userIcon.style.display = 'flex';
+        userIcon.style.backgroundColor = 'rgba(255, 107, 107, 0.4)';
+        dropdownUsername.textContent = 'Not Signed In';
+        visibleUsernameLabel.textContent = 'Sign In'; // <--- UPDATE 2
+        visibleUsernameLabel.style.cursor = 'pointer';
+        userIcon.onclick = showLoginModal;
+        visibleUsernameLabel.onclick = showLoginModal; // Allow clicking the label to show modal
+    }
+}
+
+
+function handleLogout() {
+    sessionStorage.removeItem("anonymousUser");
+    currentUser = null;
+    alert("You have been logged out. We hope to see you again soon!");
+    updateHeaderDisplay(); 
+    userDropdown.classList.remove('show'); // Close dropdown
+    showLoginModal(); // Go back to login/create
+}
+
+function handleDeleteAccount() {
+    if (!currentUser) {
+        return alert("You must be logged in to delete an account.");
+    }
+
+    const confirmation = prompt(`Type your username (${currentUser}) to confirm deletion of your account. THIS ACTION IS PERMANENT.`);
+
+    if (confirmation === currentUser) {
+        // 1. Remove the user from local storage
+        delete users[currentUser];
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // 2. Log out and clear session
+        sessionStorage.removeItem("anonymousUser");
+        currentUser = null;
+        
+        alert("Your account has been permanently deleted. All associated user data has been removed.");
+        
+        // 3. Update UI and show login modal
+        updateHeaderDisplay();
+        userDropdown.classList.remove('show'); // Close dropdown
+        showLoginModal();
+    } else if (confirmation !== null) {
+        alert("Confirmation failed. Account was NOT deleted.");
+    }
+}
+
+// Attach event listeners for the new dropdown buttons
+dropdownLogoutBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // Stop link from navigating
+    if (currentUser) handleLogout();
+});
+
+dropdownDeleteBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // Stop link from navigating
+    if (currentUser) handleDeleteAccount();
+});
+
+
+    // **1. Load Check and Setup**
+window.addEventListener("load", () => {
+   
+    // Check login status and display header appropriately
+    updateHeaderDisplay();
+
+    // If no user is logged in, force show the modal to authenticate
+    if (!currentUser) {
+        showLoginModal();
+    } else {
+        hideLoginModal();
+    }
+    
+    
+    // **NEW: Load and display the most popular confessions**
+    renderTopConfessions();
+    setInterval(renderTopConfessions, 1000); // refresh every 5 seconds
+
+});
+
+
+    // **2. Input Validation (Enable Buttons)**
+    // Requires both username and password (min 6 chars) to enable buttons
+    document.querySelectorAll('#username, #password').forEach(input => {
+        input.addEventListener('input', () => {
+            const userValid = usernameInput.value.trim().length > 0;
+           const passValid = passwordInput.value.length > 0 && passwordInput.value.length <= 4;
+            const formValid = userValid && passValid;
+
+            loginBtn.disabled = !formValid;
+            createBtn.disabled = !formValid;
+
+            if (formValid) {
+                loginBtn.classList.add('active');
+                createBtn.classList.add('active');
+            } else {
+                loginBtn.classList.remove('active');
+                createBtn.classList.remove('active');
+            }
+        });
+    });
+
+
+    // **3. Handle Create Account**
+    createBtn.addEventListener("click", () => {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+     if (!username || password.length === 0 || password.length > 4) 
+    return alert("Please choose a username and a password of at most 4 characters!");
+
+      if (users[username]) return alert("Username already exists! Please try logging in or choosing a different name.");
+
+      users[username] = password;
+      localStorage.setItem("users", JSON.stringify(users));
+
+      sessionStorage.setItem("anonymousUser", username);
+currentUser = username;
+
+      alert(`Welcome ${username}! You're now logged in anonymously.`);
+      updateHeaderDisplay(); // Refresh header to show new user
+      hideLoginModal();
+    });
+
+    // **4. Handle Log In**
+    loginBtn.addEventListener("click", () => {
+      // Log In uses the username typed in the full form
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!users[username] || users[username] !== password) {
+        alert("Invalid username or password. Please try again.");
+        return;
+      }
+
+      sessionStorage.setItem("anonymousUser", username);
+currentUser = username;
+
+
+      alert(`Welcome back ${username}!`);
+      updateHeaderDisplay(); // Refresh header to show logged-in user
+      hideLoginModal();
+    });
+    
+  </script>
+  <div id="audioModal" class="modal" style="display: none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:2000;">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 20px; border-radius: 10px; background: var(--card-bg); color: var(--text-color);">
+        <h3 style="color:var(--accent-color);">Record Your Confession 🎧</h3>
+        <p id="recordingStatus">Press the button to start recording.</p>
+<div id="timerDisplay" style="font-size: 1.5rem; margin: 10px 0; color: #ff0066; display: none;">00:00</div>
+<canvas id="audioVisualizer" width="300" height="80" style="background: rgba(0,0,0,0.1); border-radius: 5px; margin-bottom: 15px; display: none;"></canvas>
+
+<div id="controlButtons">
+    <button id="startRecording" style="margin: 5px; padding: 10px 20px; background: #E74C3C;">🔴 Start Recording</button>
+    <button id="pauseRecording" style="margin: 5px; padding: 10px 20px; background: #F39C12; display: none;">⏸️ Pause</button>
+    <button id="resumeRecording" style="margin: 5px; padding: 10px 20px; background: #2ECC71; display: none;">▶️ Continue</button>
+    
+    <button id="stopRecording" style="margin: 5px; padding: 10px 20px; background: #3498DB; display: none;">⏹️ Stop Recording</button>
+    
+    <button id="postConfession" style="margin: 5px; padding: 10px 20px; background: #3498DB; display: none;">✅ Post Confession</button>
+    <button id="downloadRecording" style="margin: 5px; padding: 10px 20px; background: #FFD700; color: black; display: none;">⬇️ Download Audio</button>
+    <button id="cancelRecording" style="margin: 5px; padding: 10px 20px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">❌ Cancel & Clear</button>
+</div>
+        
+        <audio id="audioPlayback" controls style="width: 100%; margin-top: 15px; display: none;"></audio>
+        <button id="saveConfession" style="margin-top: 15px; padding: 8px 15px; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">💾 Save Audio Confession</button>
+        <button onclick="hideAudioModal()" style="margin-top: 10px; padding: 8px 15px; background: #666; color:white; border:none; border-radius:5px; cursor: pointer;">Close</button>
+    </div>
+</div>
+
+<script>
+    // Function to toggle the new user menu dropdown
+function toggleUserMenu() {
+    userDropdown.classList.toggle('show');
+}
+
+// Close the dropdown if the user clicks outside of the menu container
+window.onclick = function(event) {
+    // Check if the click is outside the userMenuContainer itself
+    if (!userMenuContainer.contains(event.target)) {
+        if (userDropdown.classList.contains('show')) {
+            userDropdown.classList.remove('show');
+        }
+    }
+}
+// Audio Modal Functions
+
+// Function to handle showing the modal
+function showAudioModal() {
+    document.getElementById('audioModal').style.display = 'flex';
+}
+// Function to handle hiding the modal and performing full cleanup
+function hideAudioModal() {
+    document.getElementById('audioModal').style.display = 'none';
+    // CRUCIAL: Call resetModalState to stop timer/recording/visualizer cleanup
+    resetModalState(); 
+}
+
+// --- Audio Recording Logic with Visualization and Download Fix ---
+let mediaRecorder;
+let audioChunks = [];
+let audioBlob = null;
+let startTime = 0; 
+let timerInterval;
+let activeStream = null; 
+
+// Web Audio API Variables 
+let audioContext = null;
+let analyser = null;
+let dataArray = null;
+let bufferLength = 0;
+let drawVisual = null;
+const visualizer = document.getElementById('audioVisualizer');
+const canvasCtx = visualizer.getContext('2d');
+
+
+// Get all control elements
+const startBtn = document.getElementById('startRecording');
+const pauseBtn = document.getElementById('pauseRecording');
+const resumeBtn = document.getElementById('resumeRecording');
+const stopBtn = document.getElementById('stopRecording'); 
+const postConfessionBtn = document.getElementById('postConfession'); 
+const downloadBtn = document.getElementById('downloadRecording');
+const cancelBtn = document.getElementById('cancelRecording');
+const playback = document.getElementById('audioPlayback');
+const status = document.getElementById('recordingStatus');
+const timerDisplay = document.getElementById('timerDisplay');
+const controlButtons = document.getElementById('controlButtons');
+
+
+/* ========== TIMER FUNCTIONS ========== */
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+function startTimer() {
+    timerDisplay.style.display = 'block';
+    if (timerInterval) return; 
+
+    timerInterval = setInterval(() => {
+        startTime++;
+        timerDisplay.textContent = formatTime(startTime);
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null; 
+}
+
+/* ========== VISUALIZATION FUNCTION ========== */
+
+function visualize() {
+    if (!analyser || mediaRecorder.state === 'inactive') {
+        if (drawVisual) cancelAnimationFrame(drawVisual);
+        return;
+    }
+
+    drawVisual = requestAnimationFrame(visualize);
+    analyser.getByteFrequencyData(dataArray);
+
+    canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)'; 
+    canvasCtx.clearRect(0, 0, visualizer.width, visualizer.height);
+
+    const barWidth = (visualizer.width / bufferLength) * 2.5;
+    let barHeight;
+    let x = 0;
+
+    for(let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] / 2;
+        const gradient = canvasCtx.createLinearGradient(0, 0, 0, visualizer.height);
+        gradient.addColorStop(0, '#ff0066'); 
+        gradient.addColorStop(1, '#ff8a00'); 
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.fillRect(x, visualizer.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1; 
+    }
+}
+
+
+/* ========== RECORDER FUNCTIONS (Includes essential cleanup logic) ========== */
+
+function resetModalState() {
+    stopTimer();
+    visualizer.style.display = 'none';
+    if (drawVisual) cancelAnimationFrame(drawVisual);
+    
+    canvasCtx.clearRect(0, 0, visualizer.width, visualizer.height);
+
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop(); 
+    }
+    
+    if (activeStream) {
+        // Crucial for microphone release
+        activeStream.getTracks().forEach(track => track.stop());
+        activeStream = null;
+    }
+    
+    // Reset controls to the 'Start' state
+    status.textContent = 'Press the button to start recording.';
+    timerDisplay.style.display = 'none';
+    playback.style.display = 'none';
+    
+    // Show only the start button
+    startBtn.style.display = 'inline-block';
+    pauseBtn.style.display = 'none';
+    resumeBtn.style.display = 'none';
+    stopBtn.style.display = 'none'; 
+    postConfessionBtn.style.display = 'none'; 
+    downloadBtn.style.display = 'none'; 
+    cancelBtn.style.display = 'none'; 
+    
+    // Clear playback source and stored blob
+    playback.src = '';
+    audioBlob = null; 
+    startTime = 0; 
+}
+
+
+startBtn.addEventListener('click', async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        activeStream = stream; // Store the stream globally
+        
+        let mimeType = MediaRecorder.isTypeSupported('audio/webm; codecs=opus') ? 'audio/webm; codecs=opus' : 'audio/webm';
+        mediaRecorder = new MediaRecorder(stream, { mimeType }); 
+        
+        audioChunks = [];
+        audioBlob = null;
+        
+        // Setup Web Audio API for visualization
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256; 
+            bufferLength = analyser.frequencyCount;
+            dataArray = new Uint8Array(bufferLength);
+            
+            const source = audioContext.createMediaStreamSource(activeStream);
+            source.connect(analyser);
+        }
+        
+        visualizer.style.display = 'block';
+        visualize();
+        
+        
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+
+        // This handles the logic after the recording is STOPPED
+        mediaRecorder.onstop = () => {
+            stopTimer(); 
+            
+            // Stop the active microphone stream tracks to allow the playback audio to work correctly
+            if (activeStream) {
+                activeStream.getTracks().forEach(track => track.stop());
+            }
+            
+            if (drawVisual) cancelAnimationFrame(drawVisual);
+            visualizer.style.display = 'none';
+            
+            // Create the Blob for playback and saving
+            audioBlob = new Blob(audioChunks, { type: mimeType }); 
+            const audioUrl = URL.createObjectURL(audioBlob);
+            playback.src = audioUrl;
+            playback.style.display = 'block'; 
+            playback.load(); // Force the audio element to load the new source
+            
+            status.textContent = 'Recording ready! Play to listen, then Post, Download, or Cancel.';
+            
+            // Show action buttons for final decision
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'none';
+            resumeBtn.style.display = 'none';
+            stopBtn.style.display = 'none';
+            postConfessionBtn.style.display = 'inline-block';
+            downloadBtn.style.display = 'inline-block'; 
+            cancelBtn.style.display = 'inline-block'; 
+        };
+
+        mediaRecorder.start();
+        startTime = 0; 
+        startTimer();
+
+        startBtn.style.display = 'none';
+        pauseBtn.style.display = 'inline-block';
+        resumeBtn.style.display = 'none';
+        stopBtn.style.display = 'inline-block'; 
+        postConfessionBtn.style.display = 'none';
+        downloadBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+        status.textContent = 'Recording...';
+
+    } catch (err) {
+        status.textContent = 'Error: Could not access microphone. Make sure permissions are granted.';
+        console.error('Recording error:', err);
+        resetModalState();
+    }
+});
+
+
+pauseBtn.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.pause();
+        stopTimer(); 
+        if (drawVisual) cancelAnimationFrame(drawVisual);
+        status.textContent = 'Paused. Click Continue to resume or Stop Recording to preview.'; 
+        
+        // Show Resume and Stop buttons
+        pauseBtn.style.display = 'none';
+        resumeBtn.style.display = 'inline-block';
+        stopBtn.style.display = 'inline-block'; 
+        
+        // Hide final decision buttons
+        postConfessionBtn.style.display = 'none';
+        downloadBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+    }
+});
+
+
+resumeBtn.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === 'paused') {
+        mediaRecorder.resume();
+        startTimer(); 
+        visualize();
+        status.textContent = 'Recording...';
+        pauseBtn.style.display = 'inline-block';
+        resumeBtn.style.display = 'none';
+        stopBtn.style.display = 'inline-block';
+        
+        // Hide final decision buttons
+        postConfessionBtn.style.display = 'none';
+        downloadBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+    }
+});
+
+
+// STOP BUTTON HANDLER: Stops recording and triggers onstop 
+stopBtn.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop(); 
+    }
+});
+
+
+// CANCEL BUTTON HANDLER - Clears audio but keeps the modal open
+cancelBtn.addEventListener('click', () => {
+    alert('Audio recording discarded. Ready to start a new recording.');
+    resetModalState(); 
+});
+
+
+// DOWNLOAD BUTTON HANDLER - Forces the recorded audio file to download
+downloadBtn.addEventListener('click', () => {
+    if (!audioBlob) {
+        return alert('No audio available to download.');
+    }
+    
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(audioBlob);
+    a.download = `black-confession-${Date.now()}.webm`; 
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+});
+
+
+// POST CONFESSION BUTTON HANDLER (Saves to localStorage)
+postConfessionBtn.addEventListener('click', () => {
+    // If the user hasn't hit Stop/Preview yet, we force it to stop and prepare the audio
+    if (mediaRecorder && mediaRecorder.state !== 'inactive' && audioBlob === null) {
+         mediaRecorder.stop();
+    }
+    
+    if (!audioBlob) {
+        return alert('No audio recorded. Please start recording first.');
+    }
+
+    // --- FILE TYPE CATEGORIZATION ---
+    // The mere act of reaching this function means the input is an audio file (Type Check).
+    
+    // Audio is stored in the dedicated 'audioConfessions' list.
+    const reader = new FileReader();
+    reader.readAsDataURL(audioBlob);
+    
+    reader.onloadend = function() {
+        const base64data = reader.result;
+        
+        const audioConfessions = JSON.parse(localStorage.getItem('audioConfessions')) || [];
+        
+        const newConfession = {
+            id: 'audio-' + Date.now(),
+            dataUrl: base64data,
+            date: new Date().toLocaleString(),
+            username: sessionStorage.getItem("anonymousUser") || 'Anonymous',
+            // No category is added here, as it's separate from text categories.
+        };
+        audioConfessions.unshift(newConfession);
+        localStorage.setItem('audioConfessions', JSON.stringify(audioConfessions));
+
+        // Note the user where to find it.
+        alert('Audio confession posted successfully! It has been stored separately and can be viewed via the "View Audio Confessions" button on the Categories page.');
+        
+        // Reset and close the modal after successful post
+        resetModalState();
+        hideAudioModal();
+        
+        window.location.reload(); 
+    }
+});
+</script>
+
+</body>
+</html>

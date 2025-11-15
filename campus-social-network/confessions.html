@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recent Text Confessions</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Theme Variables - Keep */
+    :root {
+      --bg-color: #121212;
+      --text-color: #fff;
+      --card-bg: #1e1e1e;
+      --accent-color: #ffb703;
+    }
+    body.light-mode {
+      --bg-color: #f8f9fa;
+      --text-color: #222;
+      --card-bg: #ffffff;
+      --accent-color: #0077b6;
+    }
+
+    /* General Body Styles - Keep */
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding-top: 90px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Header/Logo Styles - Keep */
+    header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--card-bg);
+      box-shadow: 0 2px 10px rgba(206, 5, 5, 0.4);
+      padding: 10px 0;
+    }
+    header img.logo {
+      height: 60px;
+      width: 60px;
+      border-radius: 50%;
+    }
+
+    /* New Title Style */
+    h1.page-title {
+      margin: 20px 0 30px;
+      font-size: 2rem;
+      color: #00FFFF;
+    }
+    
+    /* New Confession List Styles */
+    #confessionsList {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto 50px;
+      text-align: left;
+    }
+
+    .confession {
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .confession-text {
+  font-size: 1em;
+  line-height: 1.5em;
+  color: #f5f5f5;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.read-more,
+.show-less {
+  color: #00ffff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.read-more:hover,
+.show-less:hover {
+  text-decoration: underline;
+}
+
+    .confession-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+        opacity: 0.7;
+        margin-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 10px;
+    }
+
+    .like-btn {
+  background: none;
+  border: none;
+  font-size: 1.3em;
+  cursor: pointer;
+  color: white;
+  transition: color 0.2s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  vertical-align: middle;
+  position: relative;
+  overflow: visible;
+}
+.icon-btn { 
+    color: #ccc; /* Default grey color */
+    font-size: 1.5em; /* Same size as like button */
+}
+/* New style for the UNLIKED state (White Heart) */
+.like-btn.unliked {
+    color: #fff; /* White color for the entire button text/icon */
+}
+/* New style for the LIKED state (Red Heart) */
+.like-btn.liked {
+  color: red;
+  animation: heartPop 0.4s ease;
+}
+  .like-btn.disliked {
+  color: #ff6666;
+  animation: heartBreak 0.6s ease;
+}
+.like-btn span {
+  font-size: 1em;
+  line-height: 1;
+  display: inline-block;
+}
+.floating-heart {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) scale(1);
+  font-size: 1.3em;
+  opacity: 1;
+  pointer-events: none;
+  animation: floatHeart 1s ease-out forwards;
+}
+
+.like-btn:hover {
+  /* Use a slightly different color or effect for a good hover state */
+  color: #ff99c4;
+  transform: scale(1.1);
+}
+/* 🎨 Vote Count Colors (numbers only) */
+.like-btn span {
+  color:#00ffff;   /* red for likes count */
+  font-weight: bold;
+}
+
+.msg-btn span {
+  color: #00ffff;   /* cyan for comments count */
+  font-weight: bold;
+}
+
+.save-btn span {
+  color: #ffd633;   /* gold for saves count */
+  font-weight: bold;
+}
+.like-btn:hover span { text-shadow: 0 0 6px rgba(255,77,77,0.7); }
+.msg-btn:hover span { text-shadow: 0 0 6px rgba(0,255,255,0.7); }
+.save-btn:hover span { text-shadow: 0 0 6px rgba(255,214,51,0.7); }
+
+@keyframes floatHeart {
+  0% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -30px) scale(1.3);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -80px) scale(1);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .like-btn { font-size: 1.1em; gap: 4px; }
+}
+/* ❤️ Pulse Animation */
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* 💔 Broken Heart Animation */
+@keyframes heartBreak {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.3) rotate(-10deg); color: #ff3366; }
+  50% { transform: scale(0.8) rotate(10deg); color: #ff6666; }
+  75% { transform: scale(1.2) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); color: white; }
+}
+
+@media (max-width: 480px) {
+  .like-btn { font-size: 1.1em; gap: 4px; }
+}
+.like-btn:active {
+    transform: scale(0.95);
+}
+    .like-btn:hover {
+      color: #ff0066;
+      transform: scale(1.1);
+    }
+    .like-btn:active {
+        transform: scale(0.95);
+    }
+    .focus-view {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,15,0.95);
+  backdrop-filter: blur(6px);
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 15px;
+  overflow-y: auto;
+}
+/* Floating Back Button (fixed to screen) */
+#floatingBackBtn {
+  position: fixed;              /* stays in place even when scrolling */
+  bottom: 20px;
+  left: 20px;
+  background: #00ffff;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,255,255,0.6);
+  opacity: 0;                   /* start hidden */
+  transition: opacity 0.6s ease;
+  z-index: 9999;
+}
+
+#floatingBackBtn.visible {
+  opacity: 1;                   /* show when active */
+}
+
+#floatingBackBtn.hidden {
+  opacity: 0;                   /* fade out when idle */
+  pointer-events: none;
+}
+
+
+
+.focus-inner {
+  max-width: 600px;
+  width: 100%;
+  background: #1a1a1d;
+  border: 1px solid #00ffff40;
+  border-radius: 12px;
+  padding: 25px;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+}
+
+.back-btn {
+  background: #00ffff;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background: #00cccc;
+}
+
+    
+    /* Audio button alignment */
+    .audio-link-container {
+        margin: 20px auto 30px; 
+        width: 90%; 
+        max-width: 800px; 
+        text-align: center;
+    }
+    .back-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  text-decoration: none;
+  background: var(--accent-color); /* This is the current yellow/blue color */
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+.back-btn:hover {
+  background: #cc0052; /* Darker red for hover state */
+}
+#commentList::-webkit-scrollbar {
+  width: 6px;
+}
+#commentList::-webkit-scrollbar-thumb {
+  background-color: #00ffff60;
+  border-radius: 3px;
+}
+#commentList::-webkit-scrollbar-track {
+  background: transparent;
+}
+.msg-btn, .save-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.3em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.msg-btn:hover, .save-btn:hover {
+  transform: scale(1.2);
+}
+.msg-btn span {
+  color: #00ffff;   /* bright cyan for message count */
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.msg-btn:hover span {
+  text-shadow: 0 0 6px rgba(0,255,255,0.7);
+}
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <img src="unnamed-removebg-preview.png" alt="Black Confessions Logo" class="logo">
+  </header>
+
+  <h1 class="page-title">Recent Confessions</h1>
+
+  <div class="audio-link-container">
+    <a href="audio-confessions.html" style="text-decoration: none;">
+        <button id="viewAudioPosts" style="
+            padding: 15px 30px;
+            background-color: #ff0066; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 0, 102, 0.4);
+            transition: background-color 0.3s;
+        ">
+            🎧 View Audio Confessions
+        </button>
+    </a>
+  </div>
+
+  <div id="confessionsList">
+    <p style="text-align: center; opacity: 0.7;">Loading confessions...</p>
+  </div>
+
+  <a href="homepage-confessions.html" class="back-btn">Back to Home</a>
+
+  <script>
+{
+function getLikedStatus(confessionId) {
+    // Only use currentUserId here, which is guaranteed to be set above
+    const likedPosts = JSON.parse(localStorage.getItem(`likes_${currentUserId}`)) || {};
+    return likedPosts[confessionId] === true;
+}
+
+// Helper function to save the liked status
+function setLikedStatus(confessionId, isLiked) {
+    // Only use currentUserId here
+    const likedPosts = JSON.parse(localStorage.getItem(`likes_${currentUserId}`)) || {};
+    if (isLiked) {
+        likedPosts[confessionId] = true;
+    } else {
+        delete likedPosts[confessionId];
+    }
+    localStorage.setItem(`likes_${currentUserId}`, JSON.stringify(likedPosts));
+}
+
+// =========================================================================
+// Fix 3: HandleLike Function (Replace existing handleLike)
+// =========================================================================
+function handleLike(confessionId) {
+    let allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+    const index = allConfessions.findIndex(c => c.id === confessionId);
+    
+    if (index > -1) {
+        let isCurrentlyLiked = getLikedStatus(confessionId);
+        
+        if (isCurrentlyLiked) {
+            // UNLIKE: Decrement count and set status to false
+            allConfessions[index].likes = Math.max(0, (allConfessions[index].likes || 0) - 1);
+            setLikedStatus(confessionId, false);
+        } else {
+            // LIKE: Increment count and set status to true
+            allConfessions[index].likes = (allConfessions[index].likes || 0) + 1;
+            allConfessions[index].lastLiked = Date.now();
+            setLikedStatus(confessionId, true);
+        }
+        
+        localStorage.setItem("confessions", JSON.stringify(allConfessions));
+        renderConfessions(); // Re-render to update the count and icon color
+    }
+}}
+function toggleLike(button, confessionId) {
+  let allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+  const index = allConfessions.findIndex(c => c.id === confessionId);
+  if (index === -1) return;
+
+  const post = allConfessions[index];
+  const isLiked = !getLikedStatus(confessionId); // check current state
+
+  // Update the like count realistically
+  if (isLiked) {
+    post.likes = (post.likes || 0) + 1;
+  } else {
+    post.likes = Math.max((post.likes || 1) - 1, 0);
+  }
+
+  // Save the liked status per user
+  setLikedStatus(confessionId, isLiked);
+
+  // Save the updated confessions back to localStorage
+  localStorage.setItem("confessions", JSON.stringify(allConfessions));
+
+  // Update button visually
+  button.classList.toggle("liked", isLiked);
+  button.innerHTML = `${isLiked ? "❤️" : "🤍"} <span>${post.likes}</span>`;
+
+  // Floating animation — ❤️ for like, 💔 for unlike
+  const floating = document.createElement("div");
+  floating.classList.add("floating-heart");
+  floating.textContent = isLiked ? "❤️" : "💔";
+
+  const randomX = (Math.random() * 40 - 20);
+  floating.style.left = `calc(50% + ${randomX}px)`;
+
+  if (!isLiked) floating.style.animationDuration = "1.2s";
+
+  button.appendChild(floating);
+  setTimeout(() => floating.remove(), 1200);
+}
+
+
+    // --- LIKING AND RENDERING LOGIC ---
+    
+    // Function to handle like clicks (copied from index.html logic)
+    // Get the current user's anonymous ID (Crucial for tracking who liked what)
+const currentUserId = sessionStorage.getItem("anonymousUser"); 
+
+// Helper function to check if the current user has liked a post
+function getLikedStatus(confessionId) {
+    if (!currentUserId) return false;
+    // Store liked status under a unique key for the current user
+    const likedPosts = JSON.parse(localStorage.getItem(`likes_${currentUserId}`)) || {};
+    return likedPosts[confessionId] === true;
+}
+
+// Helper function to save the liked status
+function setLikedStatus(confessionId, isLiked) {
+    if (!currentUserId) return;
+    const likedPosts = JSON.parse(localStorage.getItem(`likes_${currentUserId}`)) || {};
+    if (isLiked) {
+        likedPosts[confessionId] = true;
+    } else {
+        delete likedPosts[confessionId]; // Remove post if unliked
+    }
+    localStorage.setItem(`likes_${currentUserId}`, JSON.stringify(likedPosts));
+}
+
+// Function to handle like clicks (MODIFIED for realistic toggle)
+function handleLike(confessionId) {
+    if (!currentUserId) {
+        alert("Please log in to like posts.");
+        return;
+    }
+
+    let allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+    const index = allConfessions.findIndex(c => c.id === confessionId);
+    
+    if (index > -1) {
+        let isCurrentlyLiked = getLikedStatus(confessionId);
+        
+        if (isCurrentlyLiked) {
+            // UNLIKE: Decrement count and set status to false
+            allConfessions[index].likes = Math.max(0, (allConfessions[index].likes || 0) - 1);
+            setLikedStatus(confessionId, false);
+        } else {
+            // LIKE: Increment count and set status to true
+            allConfessions[index].likes = (allConfessions[index].likes || 0) + 1;
+            allConfessions[index].lastLiked = Date.now(); // Update timestamp for trending sort
+            setLikedStatus(confessionId, true);
+        }
+        
+        localStorage.setItem("confessions", JSON.stringify(allConfessions));
+        renderConfessions(); // Re-render to update the count and icon color
+    }
+}
+
+    function renderConfessions() {
+        const listContainer = document.getElementById("confessionsList");
+        listContainer.innerHTML = ""; // Clear existing list
+
+        // Get all text confessions
+        let allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+
+        if (allConfessions.length === 0) {
+            listContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">No text confessions posted yet 💔</p>';
+            return;
+        }
+
+        // Sort by most recent first (time is stored as a string, so we'll sort by ID/timestamp if possible)
+        // Since the 'id' starts with 'post-' and includes the timestamp, we sort numerically by ID.
+        allConfessions.sort((a, b) => {
+            const idA = parseInt(a.id.replace('post-', ''));
+            const idB = parseInt(b.id.replace('post-', ''));
+            return idB - idA; // Descending order (newest first)
+        });
+
+
+        allConfessions.forEach(post => {
+            const postElement = document.createElement("div");
+postElement.className = "confession";
+postElement.dataset.id = post.id; // ✅ gives each confession a unique ID
+
+            
+            const likes = post.likes || 0;
+            const confessionId = post.id;
+            
+           // ... inside the forEach loop
+           postElement.innerHTML = `
+    <div style="position:absolute;top:10px;right:15px;color:var(--accent-color);font-size:0.9em;">
+      🎓 ${post.university || "Anonymous University"}
+    </div>
+    ${(() => {
+  const maxLength = 20; // characters before truncating
+  const text = post.text || "";
+  const isLong = text.length > maxLength;
+  const shortText = isLong ? text.slice(0, maxLength) + "..." : text;
+
+  return `
+    <p class="confession-text" data-full="${text.replace(/"/g, "&quot;")}">
+      ${shortText}
+      ${isLong ? `<span class="read-more" onclick="expandConfession(this)">Read more</span>` : ""}
+    </p>
+  `;
+})()}
+
+    <div class="confession-footer">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="timestamp">🕒 ${post.time}</span>
+      ${(() => {
+  const userLiked = getLikedStatus(post.id); // ✅ check if user liked before
+  const heart = userLiked ? "❤️" : "🤍";
+  const likedClass = userLiked ? "liked" : "";
+  return `
+    <button class="like-btn ${likedClass}" onclick="toggleLike(this, '${post.id}')">
+      ${heart} <span>${post.likes || 0}</span>
+    </button>
+  `;
+})()}
+       ${(() => {
+  const allComments = JSON.parse(localStorage.getItem("comments")) || {};
+  const count = (allComments[post.id] && allComments[post.id].length) || 0;
+  return `
+    <button class="msg-btn" style="color:#ccc;" onclick="openComments('${post.id}')">
+      💬 <span>${count}</span>
+    </button>
+    <button class="save-btn" style="color:#ccc;">💾</button>
+  `;
+})()}
+             
+      </div>
+    </div>
+`;
+// ...
+
+            
+            listContainer.appendChild(postElement);
+        });
+
+        // Attach event listeners to all newly created like buttons
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.currentTarget.getAttribute('data-id');
+                handleLike(id);
+            });
+        });
+    }
+
+
+// === EXPAND CONFESSION (shows full story + comments) ===
+function expandConfession(el) {
+  // Safely find the confessionId
+  const confessionCard = el.closest(".confession");
+  const confessionId = confessionCard.dataset.id; // safer than regex
+  if (!confessionId) return;
+
+  showFullConfession(confessionId);
+}
+
+// === OPEN COMMENTS (when clicking 💬 icon) ===
+function openComments(confessionId) {
+  showFullConfession(confessionId, true);
+}
+
+// === Shared function to render full confession + messages ===
+function showFullConfession(confessionId, scrollToBottom = false) {
+  const allConfessions = JSON.parse(localStorage.getItem("confessions")) || [];
+  const post = allConfessions.find(p => p.id === confessionId);
+  if (!post) return;
+
+  const allComments = JSON.parse(localStorage.getItem("comments")) || {};
+  const comments = allComments[confessionId] || [];
+
+  // Create view
+  const focusView = document.createElement("div");
+  focusView.className = "focus-view";
+  focusView.innerHTML = `
+    <div class="focus-inner">
+      <div class="focused-confession">
+        <h3 style="color:#00ffff;margin-bottom:10px;">Full Confession</h3>
+        <p style="white-space: pre-wrap;color:#fff;line-height:1.6em;">${post.text}</p>
+      </div>
+      <hr style="border-color:#00ffff40;margin:15px 0;">
+      <div id="commentsSection">
+        <h4 style="color:#00ffff;">💬 Messages</h4>
+        <div id="commentList" style="max-height:250px;overflow-y:auto;margin-bottom:10px;">
+          ${
+            comments.length
+              ? comments.map(c => `
+                  <div style="background:#1e1e1e;border-radius:8px;padding:8px 10px;margin-bottom:6px;color:#ddd;">
+                    ${c.text}
+                    <div style="font-size:0.8em;opacity:0.6;">🕒 ${c.time}</div>
+                  </div>
+                `).join('')
+              : `<p style="opacity:0.6;">No messages yet — be the first to comment 💬</p>`
+          }
+        </div>
+        <div style="display:flex;gap:8px;">
+          <input id="commentInput" type="text" placeholder="Type your message..." 
+            style="flex:1;padding:10px;border-radius:8px;border:none;background:#2a2a2d;color:white;">
+          <button id="sendCommentBtn" style="background:#00ffff;color:#000;font-weight:bold;border:none;border-radius:8px;padding:10px 15px;cursor:pointer;">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(focusView);
+  document.querySelector("#confessionsList").style.display = "none";
+
+  // Floating back button
+  let backBtn = document.createElement("button");
+  backBtn.id = "floatingBackBtn";
+  backBtn.textContent = "← Back";
+  backBtn.onclick = closeFocusView;
+  document.body.appendChild(backBtn);
+  initBackButtonAutoHide();
+
+  // 💬 Add comment logic
+  document.getElementById("sendCommentBtn").addEventListener("click", () => {
+    const input = document.getElementById("commentInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const newComment = { text, time: new Date().toLocaleString() };
+    const allComments = JSON.parse(localStorage.getItem("comments")) || {};
+    if (!allComments[confessionId]) allComments[confessionId] = [];
+    allComments[confessionId].push(newComment);
+    localStorage.setItem("comments", JSON.stringify(allComments));
+
+    // Update UI
+    const commentList = document.getElementById("commentList");
+    const div = document.createElement("div");
+    div.style = "background:#1e1e1e;border-radius:8px;padding:8px 10px;margin-bottom:6px;color:#ddd;";
+    div.innerHTML = `${text}<div style='font-size:0.8em;opacity:0.6;'>🕒 ${newComment.time}</div>`;
+    commentList.appendChild(div);
+    input.value = "";
+    commentList.scrollTop = commentList.scrollHeight;
+    renderConfessions();
+  });
+
+  // 🧭 Scroll behavior — only when clicking 💬 icon
+  if (scrollToBottom) {
+    setTimeout(() => {
+      const inputBox = document.getElementById("commentInput");
+      if (inputBox) {
+        inputBox.scrollIntoView({ behavior: "smooth", block: "end" });
+        inputBox.focus();
+      }
+    }, 400);
+  }
+}
+
+
+
+// === Return to All Posts ===
+function closeFocusView() {
+  const focusView = document.querySelector(".focus-view");
+  if (focusView) focusView.remove();
+
+  const backBtn = document.getElementById("floatingBackBtn");
+  if (backBtn) backBtn.remove();
+
+  document.querySelector("#confessionsList").style.display = "block";
+}
+
+
+// === Floating Back Button Auto Hide Logic (fixed position) ===
+let backButtonTimer;
+
+function initBackButtonAutoHide() {
+  const backBtn = document.getElementById("floatingBackBtn");
+  if (!backBtn) return;
+
+  function showButton() {
+    backBtn.classList.add("visible");
+    backBtn.classList.remove("hidden");
+    clearTimeout(backButtonTimer);
+    backButtonTimer = setTimeout(() => {
+      backBtn.classList.remove("visible");
+      backBtn.classList.add("hidden");
+    }, 3000); // hide after 3s of inactivity
+  }
+
+  // show immediately when focused view opens
+  showButton();
+
+  // detect user movement/scroll/touch to re-show
+  ["scroll", "mousemove", "touchstart"].forEach(evt =>
+    window.addEventListener(evt, showButton)
+  );
+}
+
+
+    // --- INITIAL LOAD AND THEME ---
+    window.addEventListener("load", renderConfessions);
+
+    if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light-mode");
+    }
+  </script>
+</body>
+</html>

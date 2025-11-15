@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Confession 🖤 </title>
+  <link rel="stylesheet" href="style.css" />
+   <style>
+:root {
+ --bg-color: #ffffff; /* Light base background */
+ --text-color: #222; /* Dark text for readability */
+ --card-bg: #f0f0f0; /* Cards in light gray */
+ --accent: #0077b6;/* Accent color for buttons and highlights */
+}
+
+body.light-mode {
+ --bg-color: #ffffff;
+ --text-color: #222;
+ --card-bg: #f8f9fa;
+ --accent: #0077b6;
+}
+
+/* Default (Dark Mode) Variables (For inheritance from style.css background) */
+body:not(.light-mode) {
+    --bg-color: #4b0082; 
+    --text-color: #fff;
+    --card-bg: #3a006f; 
+    --accent: #ff0066;
+}
+
+body {
+ background-color: var(--bg-color);
+ color: var(--text-color);
+ transition: background-color 0.3s, color 0.3s;
+ font-family: 'Poppins', sans-serif;
+ margin: 0;
+ padding-top: 90px;
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ text-align: center;
+}
+
+/* Soft glow overlay effect */
+body::before {
+ content: "";
+ position: fixed;
+ top: 0; left: 0;
+ width: 100%; height: 100%;
+ background: radial-gradient(circle at 20% 30%, rgba(255,0,102,0.15), transparent 60%),
+ radial-gradient(circle at 80% 70%, rgba(255,0,102,0.12), transparent 60%);
+ pointer-events: none;
+ mix-blend-mode: screen;
+ animation: glowPulse 6s ease-in-out infinite alternate;
+}
+
+/* Animate background gradient colors */
+@keyframes gradientShift {
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
+}
+
+/* Animate glow pulsing subtly */
+@keyframes glowPulse {
+ 0% { opacity: 0.4; }
+ 50% { opacity: 0.7; }
+ 100% { opacity: 0.4; }
+}
+
+body.light-mode {
+ background: linear-gradient(120deg, #ffffff, #ffe6f0, #fff0f7, #ffffff);
+ background-size: 400% 400%;
+ animation: gradientShift 12s ease infinite;
+ }
+ body.light-mode::before {
+ background: radial-gradient(circle at 20% 30%, rgba(255,0,102,0.08), transparent 60%),
+ radial-gradient(circle at 80% 70%, rgba(255,0,102,0.06), transparent 60%);
+ mix-blend-mode: screen; /* keeps the glowing effect */
+ animation: glowPulse 6s ease-in-out infinite alternate;
+}
+body, body.light-mode {
+ background-size: 400% 400%;
+ animation: gradientShift 12s ease infinite;
+}
+
+
+ header {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ background: rgba(0,0,0,0.6);
+ padding: 14px 0;
+ z-index: 1000;
+ }
+ body.light-mode header {
+ background: rgba(255,255,255,0.9);
+ }
+
+ header img.logo {
+ height: 80px;
+ width: 80px;
+ border-radius: 50%;
+ object-fit: cover;
+ box-shadow: 0 0 10px rgba(255,0,102,0.08);
+ }
+
+ main {
+ max-width: 820px;
+ margin: 0 auto;
+ padding: 20px;
+ }
+
+ h2.page-title {
+ text-align: center;
+ margin: 6px 0 18px;
+ color: var(--accent);
+ font-size: 1.8rem;
+ }
+
+ .confession-container {
+ margin-top: 10px;
+ }
+
+ .confession {
+ background: var(--card-bg);
+ padding: 14px;
+ border-radius: 10px;
+ margin-bottom: 12px;
+ line-height: 1.5;
+ position: relative;
+ text-align: left; /* Crucial for making the content start at the left edge of the box */
+ padding-left: 50px; /* Add padding on the left to make space for the number */
+}
+.confession-number {
+position: absolute;
+top: 14px; /* Align with the text content */
+left: 14px; /* Position it on the left edge inside the padding area */
+font-size: 1.2rem;
+font-weight: 700;
+color: var(--accent); /* Use your accent color */
+opacity: 0.8;
+width: 30px; /* Give it a fixed width */
+text-align: left; /* CHANGED: Left align the number for a cleaner look */
+}
+
+/* --- CONFESSION TEXT STYLING ADDITIONS --- */
+.confession p,
+#storyText {
+    /* Ensures user-entered line breaks are respected */
+    white-space: pre-wrap;
+    /* Adds subtle spacing */
+    letter-spacing: 0.01em; 
+    /* Increases vertical space between lines */
+    line-height: 1.6;
+    /* Increases the font size for the main text */
+    font-size: 1.05rem; 
+    /* Forces alignment left for proper paragraph flow */
+    text-align: left; 
+    margin-top: 0; /* Remove top margin if present */
+}
+/* --- END CONFESSION TEXT STYLING ADDITIONS --- */
+
+ .confession .time {
+   display: inline-block;
+ font-size: 0.85rem;
+ opacity: 0.8;
+ color: var(--accent);
+}
+/* **FIXED CSS BLOCK FOR ALIGNMENT** */
+.confession-actions {
+display: flex;
+justify-content: space-between; /* Pushes timestamp left and buttons right */
+align-items: center;
+margin-top: 10px;
+font-size: 0.9rem;
+}
+/* This must be a separate, non-nested rule */
+.confession-actions > div {
+/* Makes sure the group of buttons stays on one line with spacing */
+display: flex;
+gap: 8px;
+}
+/* **END FIXED CSS BLOCK** */
+
+ .confession-actions button {
+ background: none;
+ border: none;
+ color: var(--text-color);
+ cursor: pointer;
+ font-size: 1rem;
+ transition: color 0.2s;
+ }
+
+.confession-actions button:hover {
+   color: var(--accent);
+ }
+
+ .back-btn {
+ position: fixed; 
+left: 18px;
+ bottom: 18px;
+ z-index: 2000;
+display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ text-decoration: none;
+ background: var(--accent);
+ color: #fff;
+ padding: 10px 14px;
+ border-radius: 10px;
+ font-weight: 600;
+ box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+ transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+ .back-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+ }
+
+ .emoji-popup {
+ position: fixed;
+ font-size: 2rem;
+ animation: floatUp 1s ease forwards;
+ pointer-events: none;
+ z-index: 9999;
+ }
+
+ @keyframes floatUp {
+ from { opacity: 1; transform: translateY(0); }
+ to { opacity: 0; transform: translateY(-80px); }
+}
+
+.read-more {
+ color: var(--accent);
+ cursor: pointer;
+ display: inline-block;
+ margin-top: 5px;
+ font-size: 0.9rem;
+ }
+
+.modal {
+   display: none;
+ position: fixed;
+ z-index: 12000;
+ left: 0; top: 0;
+ width: 100%; height: 100%;
+ background-color: rgba(0,0,0,0.75);
+ justify-content: center;
+ align-items: center;
+ }
+
+ .modal-content {
+ background: var(--bg-color);
+ padding: 20px;
+ border-radius: 10px;
+ width: 90%;
+ max-width: 520px;
+ box-shadow: 0 0 15px var(--accent);
+ text-align: left;
+ }
+ .modal-content,
+.story-modal .modal-content {
+ background: var(--card-bg);
+ color: var(--text-color);
+ border: 1px solid rgba(0,0,0,0.08); /* subtle border for separation */
+}
+
+
+ .modal textarea {
+ width: 100%;
+ height: 80px;
+ background: var(--card-bg);
+ color: var(--text-color);
+ border: 1px solid var(--accent);
+ border-radius: 5px;
+ padding: 10px;
+ margin-bottom: 10px;
+ }
+ .modal button {
+ background: var(--accent);
+ color: white;
+ border: none;
+ padding: 8px 14px;
+ border-radius: 5px;
+ cursor: pointer;
+ }
+ .story-modal .close-btn {
+ color: var(--accent);
+ background: rgba(255, 255, 255, 0.85);
+ box-shadow: 0 0 12px rgba(0,0,0,0.2);
+}
+.story-modal .close-btn:hover {
+ background: var(--accent);
+ color: #fff;
+}
+
+
+ 
+/* ====== COMMENT THREAD STYLING (TREE STRUCTURE LIKE YOUR DRAWING) ====== */
+.comment-list {
+ margin-top: 12px;
+ padding-left: 0;
+}
+
+.comment {
+ position: relative;
+ margin-bottom: 12px;
+}
+
+.comment .body {
+ background: var(--card-bg);
+ border-radius: 10px;
+ padding: 8px 10px;
+ color: var(#696969);
+ font-size: 1.0rem;
+ display: inline-block;
+ min-width: 160px;
+}
+
+/* Top-level comment (no indent) */
+.comment-list > .comment {
+ margin-left: 0;
+}
+
+/* Replies indentation */
+.reply-list {
+ margin-left: 35px; /* indentation distance for each level */
+ border-left: 2px solid rgba(255, 0, 102, 0.25);
+ padding-left: 12px;
+ margin-top: 6px;
+}
+
+/* Reply comment box */
+.reply-list .comment .body {
+ background: rgba(255,255,255,0.03);
+}
+
+/* Vertical connector line for replies */
+.reply-list::before {
+ content: "";
+ position: absolute;
+ left: 16px;
+ top: 0;
+ bottom: 0;
+ width: 2px;
+ background: rgba(255, 0, 102, 0.25);
+}
+
+/* Horizontal connector (to comment box) */
+.reply-list .comment::before {
+ content: "";
+ position: absolute;
+ left: -12px;
+ top: 18px;
+ width: 12px;
+ height: 2px;
+ background: rgba(255, 0, 102, 0.4);
+}
+
+/* Reply button + meta styling */
+.comment .meta {
+ font-size: 0.8rem;
+ color: var(--accent);
+ opacity: 0.85;
+ margin-top: 6px;
+}
+.comment .reply-btn {
+ background: none;
+ border: none;
+ color: var(--accent);
+ cursor: pointer;
+ font-size: 0.85rem;
+ margin-top: 4px;
+}
+
+
+ .reply-list {
+ margin-top: 10px;
+ padding-left: 0;
+ border-left: none;
+ }
+ .reply-list .comment {
+ background: none;
+ padding: 0;
+ border-left: none; /* The tree lines are handled by ::before and ::after */
+ }
+ .reply {
+ /* Kept for safety but not strictly needed with new structure */
+ background: rgba(255,255,255,0.015);
+ padding: 8px;
+ border-radius: 8px;
+ margin-bottom: 6px;
+ font-size: 0.9rem;
+ }
+
+ /* Focus mode: when a confession is expanded, hide the others */
+ .confession-container.focus-mode .confession {
+ display: none;
+ }
+ .confession-container.focus-mode .confession.expanded {
+ display: block;
+ }
+ /* ===== Story modal (dark themed) ===== */
+ .story-modal {
+ position: fixed;
+ top: 0; left: 0;
+ width: 100%; height: 100%;
+ background: rgba(0,0,0,0.85);
+ display: none;
+ justify-content: center;
+ align-items: center;
+ z-index: 9999;
+ padding: 20px;
+ }
+ .story-modal .modal-content {
+ background: var(--bg-color);
+ color: var(--text-color);
+ width: 100%;
+ max-width: 760px;
+ max-height: 90vh;
+ overflow-y: auto;
+ border-radius: 12px;
+ padding: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,0,102,0.12);
+ }
+.story-modal .close-btn {
+ position: fixed; /* stays visible even when scrolling */
+ top: 16px;
+ right: 22px;
+ font-size: 28px;
+ cursor: pointer;
+ color: var(--accent);
+ background: rgba(0, 0, 0, 0.45);
+ backdrop-filter: blur(6px);
+ padding: 6px 12px;
+ border-radius: 50%;
+ box-shadow: 0 0 10px rgba(255, 0, 102, 0.25);
+ transition: transform 0.2s, background 0.2s;
+ z-index: 10000; /* ensure it’s above all other content */
+}
+
+.story-modal .close-btn:hover {
+ transform: scale(1.1);
+ background: rgba(255, 0, 102, 0.25);
+}
+
+
+ .story-actions {
+ display:flex;
+ gap:12px;
+margin-top:14px;
+ }
+ .story-actions button{
+ background: none;
+ color: var(--text-color);
+ border: 1px solid rgba(255,255,255,0.06);
+ padding: 8px 12px;
+ border-radius: 8px;
+cursor: pointer;
+}
+  .story-comments button,
+#commentModal button#postComment {
+background: var(--accent); /* Visible button color */
+  color: #fff; /* Text stands out */
+border: none;
+padding: 10px 16px; /* Slightly bigger for better visibility */
+border-radius: 8px;
+cursor: pointer;
+font-weight: 600;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+ transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.story-comments button:hover,
+#commentModal button#postComment:hover {
+transform: translateY(-1px);
+box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+background: darken(var(--accent), 10%);
+}
+
+
+  .story-comments { margin-top: 18px; }
+  .story-comments .comment { 
+/* background: rgba(255,255,255,0.02); -- managed by .comment .body */
+padding: 10px; border-radius:8px; margin-bottom:8px; 
+ }
+  /* Main comment modal */
+#commentModal textarea,
+.story-comments textarea {
+background: #e6e6e6;      /* Slightly darker than card background */
+color: #222; /* Dark text for readability */
+border: 1px solid #ccc;/* Subtle border to distinguish textarea */
+border-radius: 6px;
+padding: 10px;
+font-size: 0.95rem;
+transition: background 0.3s, border 0.3s;
+width: 90%; 
+  height: 60px;
+}
+
+/* Focus effect for better UX */
+#commentModal textarea:focus,
+.story-comments textarea:focus {
+outline: none;
+border-color: var(--accent);
+ background: #f2f2f2;
+}
+#commentModal textarea::placeholder,
+.story-comments textarea::placeholder {
+color: #555; /* dark enough to be readable but subtle */
+}
+
+
+@media (max-width: 480px) {
+    header img.logo { height: 64px; width: 64px; }
+    body { padding-top: 100px; }
+    .back-btn { left: 12px; bottom: 12px; padding: 9px 12px; }
+}
+/* --- NEW CSS FOR CONFESSION NUMBERING AND ALIGNMENT --- */
+/* Makes the confession box content area align left by removing centering */
+.confession {
+  text-align: left; /* Crucial for making the content start at the left edge of the box */
+  position: relative;
+  padding-left: 50px; /* Add padding on the left to make space for the number */
+}
+
+/* Styles the new number element */
+.confession-number {
+  position: absolute;
+  top: 14px; /* Align with the text content */
+  left: 14px; /* Position it on the left edge inside the padding area */
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent); /* Use your accent color */
+  opacity: 0.8;
+  width: 30px; /* Give it a fixed width */
+  text-align: right; /* Align the number right within its small box */
+}
+/* Add this new CSS block inside your <style> tag */
+body:not(.light-mode) #commentModal textarea,
+body:not(.light-mode) .story-comments textarea {
+  /* This ensures the background is still visible */
+  background: rgba(255, 255, 255, 0.05);
+  /* CRITICAL FIX: Make text white/light so it's visible on dark background */
+  color: var(--text-color); /* This resolves to #fff in dark mode */
+  /* Border color for visual separation */
+  border-color: rgba(255, 255, 255, 0.15);
+}
+/* Revert the placeholder color for dark mode to be visible */
+body:not(.light-mode) #commentModal textarea::placeholder,
+body:not(.light-mode) .story-comments textarea::placeholder {
+    color: #bbb;
+}
+/* --- END NEW CSS --- */
+</style>
+</head>
+
+<body>
+  <header>
+    <img src="unnamed-removebg-preview.png" alt="Black Confession Logo" class="logo">
+  </header>
+
+  <main>
+    <h2 class="page-title"> 🎧 AUDIO CONFESSIONS</h2>
+    <section class="confessions-list">
+      <div class="confession-container" id="confessionContainer"></div>
+    </section>
+  </main>
+
+  <a href="confessions.html" class="back-btn"> Back to Categories</a>
+
+  <!-- Comment / Reply Modal (existing) -->
+  <div id="commentModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h3 id="modalTitle">Leave a Comment</h3>
+      <textarea id="commentText" placeholder="Type your comment here..."></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button id="postComment">Post</button>
+        <button onclick="closeModal()" style="background:#666;color:#fff;border:none;padding:8px 12px;border-radius:5px;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STORY MODAL (Full Confession Popup) ===== -->
+  <div id="storyModal" class="story-modal" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeStoryModal()">&times;</span>
+      <h2 id="storyTitle" style="color:var(--accent); margin-top:0;"><Audio></Audio> Confessions</h2>
+      <p id="storyText"></p>
+
+      <div class="story-actions" id="storyActions">
+        <!-- like/dislike buttons will be inserted dynamically -->
+      </div>
+
+      <div class="story-comments" id="storyComments">
+        <h4 style="margin-top:18px;color:var(--accent);">Comments</h4>
+        <div id="storyCommentsList"></div>
+        <textarea id="storyCommentInput" placeholder="Add a comment..."></textarea>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <button onclick="postCommentFromModal()" style="background:var(--accent);color:#fff;padding:8px 12px;border-radius:6px;border:none;cursor:pointer;">Post Comment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script>
+(function loadTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') document.body.classList.add('light-mode');
+})();
+
+let currentConfessionId = null;
+let currentReplyTarget = null; // { path, replyTo }
+let currentModalId = null; // id of confession shown in story modal
+
+/* ========== LOAD POSTS (FIXED for Audio) ========== */
+function loadAudioConfessions() {
+  const container = document.getElementById('confessionContainer');
+  // Load from the correct dedicated storage key: 'audioConfessions'
+  const audioPosts = JSON.parse(localStorage.getItem('audioConfessions')) || []; 
+  
+  // Votes and Comments still use generic keys which is fine, as IDs are unique.
+  const votes = JSON.parse(localStorage.getItem('confessionVotes')) || {};
+  const comments = JSON.parse(localStorage.getItem('confessionComments')) || {};
+
+  container.innerHTML = '';
+  if (audioPosts.length === 0) {
+    container.innerHTML = '<p style="opacity:.8">No audio confessions yet 💔</p>';
+    return;
+  }
+
+  // Reverse to put the newest post at the top (index 0)
+  audioPosts.slice().reverse().forEach((c, index) => {
+    if (!c.id) c.id = `audio-${Date.now()}-${index}`;
+    if (!votes[c.id]) votes[c.id] = { likes: 0, dislikes: 0 };
+    const v = votes[c.id];
+    const comList = comments[c.id] || [];
+
+    const d = document.createElement('div');
+    d.className = 'confession';
+    d.setAttribute('data-id', c.id);
+
+    // **UPDATED HTML:** Removed the <p> tag that contained the username
+    d.innerHTML = `
+      <div class="confession-number">${index + 1}</div>
+      <audio controls style="width: 100%;" src="${c.dataUrl}"></audio>
+      
+      <div class="confession-actions">
+        <span class="time">Posted on ${c.date || ''}</span>
+        <div>
+          <button onclick="vote('${c.id}','like',event)">👍 ${v.likes}</button>
+          <button onclick="vote('${c.id}','dislike',event)">👎 ${v.dislikes}</button>
+<button onclick="openStoryModal('${c.id}')">💬 ${comList.length}</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(d);
+  });
+
+  localStorage.setItem('confessionVotes', JSON.stringify(votes));
+}
+
+/* ========== RENDER COMMENTS (Recursive for nested replies) ========== */
+function renderCommentsHtml(commentsArray, parentPath = null, level = 0, inStoryModal = false) {
+  if (!commentsArray || commentsArray.length === 0) return '';
+
+  return commentsArray.map((comment, i) => {
+    const commentPath = parentPath !== null ? `${parentPath}-${i}` : `${i}`;
+
+    let repliesHTML = '';
+    if (comment.replies && comment.replies.length > 0) {
+      repliesHTML = `<div class="reply-list">${renderCommentsHtml(comment.replies, commentPath, level + 1, inStoryModal)}</div>`;
+    }
+    
+    // Only show reply button in the story modal for nested structure
+    const replyButton = inStoryModal ? 
+      `<button class="reply-btn" data-path="${commentPath}" data-user="${escapeHtml(comment.username)}" onclick="openReplyModalForComment(this)">Reply</button>` : '';
+
+    return `
+      <div class="comment" data-path="${commentPath}">
+        <div class="body">
+          <b>@${escapeHtml(comment.username)}</b>: ${escapeHtml(comment.text)}
+          <div class="meta">${escapeHtml(comment.date)}</div>
+          ${replyButton}
+        </div>
+        ${repliesHTML}
+      </div>
+    `;
+  }).join('');
+}
+
+/* ========== VOTING ========== */
+function vote(id, type, event) {
+  event?.preventDefault();
+  const votes = JSON.parse(localStorage.getItem('confessionVotes')) || {};
+  const currentUser = sessionStorage.getItem("anonymousUser") || null;
+  if (!currentUser) return alert('Please log in to vote.');
+
+  const userVotesKey = `userVotes_${currentUser}`;
+  const userVotes = JSON.parse(localStorage.getItem(userVotesKey)) || {};
+  if (!votes[id]) votes[id] = { likes: 0, dislikes: 0 };
+
+  if (userVotes[id] === type) {
+    alert(`You already ${type}d this post.`);
+    return;
+  }
+
+  if (userVotes[id] === 'like') votes[id].likes = Math.max(0, votes[id].likes - 1);
+  if (userVotes[id] === 'dislike') votes[id].dislikes = Math.max(0, votes[id].dislikes - 1);
+
+  if (type === 'like') {
+    votes[id].likes++;
+    showEmoji(event.clientX, event.clientY, "❤️");
+  } else {
+    votes[id].dislikes++;
+    showEmoji(event.clientX, event.clientY, "💔");
+  }
+
+  userVotes[id] = type;
+  localStorage.setItem('confessionVotes', JSON.stringify(votes));
+  localStorage.setItem(userVotesKey, JSON.stringify(userVotes));
+  loadAudioConfessions();
+  if (currentModalId === id) populateStoryModal(id);
+}
+
+function showEmoji(x, y, emoji) {
+  const e = document.createElement('div');
+  e.className = 'emoji-popup';
+  e.textContent = emoji;
+  e.style.left = (x - 12) + 'px';
+  e.style.top = (y - 24) + 'px';
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 900);
+}
+
+/* ========== STORY MODAL (FIXED for Audio) ========== */
+function openStoryModal(id) {
+  currentModalId = id;
+  document.getElementById('storyModal').style.display = 'flex';
+  populateStoryModal(id);
+}
+
+function populateStoryModal(id) {
+  // Search the correct list for the audio post
+  const allAudio = JSON.parse(localStorage.getItem('audioConfessions')) || [];
+  const post = allAudio.find(p => p.id === id); 
+  
+  if (!post) return; // Exit if the audio post is not found
+
+  const votes = JSON.parse(localStorage.getItem('confessionVotes')) || {};
+  const comments = JSON.parse(localStorage.getItem('confessionComments')) || {};
+  
+
+  document.getElementById('storyTitle').textContent = "Audio Confession"; 
+  
+  // **UPDATED HTML:** Display audio player only, removed poster name/date
+  document.getElementById('storyText').innerHTML = `
+      <audio controls style="width: 100%; margin: 15px 0;" src="${post.dataUrl}"></audio>
+      <p style="font-style: italic; font-size: 0.9rem; margin-top: 5px;">
+        This is an audio file, so there is no text content to display.
+      </p>
+  `;
+
+  const v = votes[id] || { likes: 0, dislikes: 0 };
+  document.getElementById('storyActions').innerHTML = `
+    <button onclick="vote('${id}','like',event)">❤️ Like (${v.likes})</button>
+    <button onclick="vote('${id}','dislike',event)">💔 Dislike (${v.dislikes})</button>
+  `; 
+
+  const comList = comments[id] || [];
+  const listNode = document.getElementById('storyCommentsList');
+  listNode.innerHTML = renderCommentsHtml(comList, null, 0, true) || '<p>No comments yet.</p>';
+  document.getElementById('storyCommentInput').value = ''; 
+}
+
+function closeStoryModal() {
+  document.getElementById('storyModal').style.display = 'none';
+  currentModalId = null;
+}
+window.addEventListener('click', e => {
+  const modal = document.getElementById('storyModal');
+  if (e.target === modal) closeStoryModal();
+});
+
+/* ========== COMMENT / REPLY MODAL LOGIC ========== */
+// Used for: 1. New Top-Level Comment (from main view or story modal) 2. Nested Reply
+function openModal(id) {
+  currentConfessionId = id;
+  currentReplyTarget = null;
+  document.getElementById('modalTitle').innerText = 'Leave a Comment';
+  document.getElementById('commentText').value = '';
+  document.getElementById('commentModal').style.display = 'flex';
+  document.getElementById('commentText').focus();
+}
+
+function openReplyModalForComment(buttonElement) {
+  const path = buttonElement.dataset.path;
+  const replyTo = buttonElement.dataset.user;
+
+  currentConfessionId = currentModalId; // The ID of the current confession in the story modal
+  currentReplyTarget = { path, replyTo };
+  
+  document.getElementById('modalTitle').innerText = `Reply to @${replyTo}`;
+  document.getElementById('commentText').value = `@${replyTo} `;
+  document.getElementById('commentModal').style.display = 'flex';
+  document.getElementById('commentText').focus();
+}
+
+function closeModal() {
+  document.getElementById('commentModal').style.display = 'none';
+  currentReplyTarget = null;
+  currentConfessionId = null; // Clear ID to prevent accidental posting
+  document.getElementById('commentText').value = '';
+}
+
+document.getElementById('postComment').addEventListener('click', () => {
+  const text = document.getElementById('commentText').value.trim();
+  if (!text) return alert('Type something first!');
+  const currentUser = sessionStorage.getItem("anonymousUser") || 'Anonymous';
+
+  const activeId = currentConfessionId; 
+  if (!activeId) return alert('No confession selected.');
+
+  const comments = JSON.parse(localStorage.getItem('confessionComments')) || {};
+  if (!comments[activeId]) comments[activeId] = [];
+  const now = new Date().toLocaleString();
+
+  // helper function to locate the nested comment using a path
+  function getCommentByPath(rootArray, pathParts) {
+    if (pathParts.length === 0) return null;
+    let current = rootArray[pathParts[0]];
+    for (let i = 1; i < pathParts.length; i++) {
+      if (!current.replies) current.replies = [];
+      current = current.replies[pathParts[i]];
+      if (!current) break;
+    }
+    return current;
+  }
+
+  if (currentReplyTarget) {
+    // Logic for a REPLY
+    const { path } = currentReplyTarget;
+    const pathParts = path.split('-').map(n => parseInt(n));
+    
+    const parent = getCommentByPath(comments[activeId], pathParts);
+    
+    if (!parent) return alert('Original comment not found.');
+    if (!parent.replies) parent.replies = [];
+    
+    parent.replies.push({
+      username: currentUser,
+      text: text, // Text includes @username from modal setup
+      date: now,
+      replies: []
+    });
+  } else {
+    // Logic for a NEW TOP-LEVEL COMMENT
+    comments[activeId].push({
+      username: currentUser,
+      text,
+      date: now,
+      replies: []
+    });
+  }
+
+  localStorage.setItem('confessionComments', JSON.stringify(comments));
+  
+  // Reloading/Closing logic
+  closeModal();
+  loadAudioConfessions();
+  if (currentModalId === activeId) populateStoryModal(activeId);
+});
+
+
+// This function handles posting a comment directly from the story modal's text area
+function postCommentFromModal() {
+  const text = document.getElementById('storyCommentInput').value.trim();
+  if (!text) return alert('Type something first!');
+  const currentUser = sessionStorage.getItem("anonymousUser") || 'Anonymous';
+  if (!currentModalId) return alert('No confession selected.');
+
+  const comments = JSON.parse(localStorage.getItem('confessionComments')) || {};
+  if (!comments[currentModalId]) comments[currentModalId] = [];
+
+  const now = new Date().toLocaleString();
+  comments[currentModalId].push({
+    username: currentUser,
+    text,
+    date: now,
+    replies: []
+  });
+
+  localStorage.setItem('confessionComments', JSON.stringify(comments));
+  document.getElementById('storyCommentInput').value = '';
+  populateStoryModal(currentModalId);
+}
+
+
+/* ========== HELPERS ========== */
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+loadAudioConfessions();
+</script>
+
+</body>
+</html>

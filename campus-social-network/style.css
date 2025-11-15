@@ -1,0 +1,453 @@
+/* ===== GLOWING BACKGROUND ===== */
+/* ===== GLOWING BACKGROUND ===== */
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  margin: 0;
+  color: #fff;
+  background: linear-gradient(-45deg, #ff0066, #6600ff, #111, #ff3399);
+  background-size: 400% 400%;
+  animation: gradient 8s ease infinite;
+  transition: background-color 0.4s, color 0.4s;
+  
+  /* CRUCIAL FIX: Prevents horizontal scrolling */
+  overflow-x: hidden; 
+}
+
+/* ===== GRADIENT ANIMATION ===== */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== HEADER ===== */
+header {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 20px;
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+header h1 {
+  color: #ff66cc;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+header p {
+  font-size: 1.1em;
+  color: #eee;
+  text-align: center; /* <--- ADD THIS to center the p */
+  margin-top: 0;
+}
+
+/* ===== LOGO ===== */
+.logo {
+  width: 90px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #a200ff;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ===== MENU ICON ===== */
+.menu-icon {
+  position: absolute;
+  top: 35px;
+  right: 5px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+/* ===== CONFESSION BOX ===== */
+.confession-box {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 80%; /* Use 90% width by default */
+  max-width: 600px; /* Constrain maximum size for desktop */
+  margin: 25px auto;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+}
+
+.confession-box textarea {
+  width: 90%;
+  height: 100px;
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 8px;
+  resize: horizontal;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 1em;
+}
+
+/* ===== BUTTONS ===== */
+.confession-box button {
+  margin-top: 15px;
+  padding: 10px 25px;
+  border: none;
+  background-color: #ff0066;
+  color: white;
+  border-radius: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confession-box button:hover {
+  background-color: #ff3399;
+  box-shadow: 0 0 15px #ff66cc;
+}
+
+/* ===== CONFESSIONS LIST ===== */
+.confessions-list {
+  width: 90%;
+  max-width: 600px;
+  margin: 30px auto;
+  text-align: left;
+}
+
+.confession {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.confession a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.confession a:hover {
+  color: #ff66cc;
+}
+
+/* ===== CATEGORY BADGE ===== */
+.category {
+  display: block;
+  background-color: #ff0066;
+  color: white;
+  font-size: 0.85em;
+  padding: 5px 10px;
+  border-radius: 12px;
+  text-align: left;
+  margin-top: 8px;
+  width: fit-content;
+  transition: 0.3s;
+}
+
+.category:hover {
+  background-color: #ff3399;
+  transform: scale(1.05);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  overflow-x: hidden;
+  transition: 0.4s;
+  padding-top: 60px;
+  z-index: 1000;
+  backdrop-filter: blur(15px);
+}
+
+.sidebar.active {
+  width: 300px;
+  padding: 20px;
+}
+
+.sidebar h3 {
+  color: #ff66cc;
+}
+
+.sidebar p {
+  color: #ddd;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  outline: none;
+}
+
+.search-bar::placeholder {
+  color: #ccc;
+}
+
+/* ===== TOGGLE SWITCH ===== */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* ===== BUTTON GROUP ===== */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* ===== CATEGORY LIST ===== */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 80%;
+  margin: 20px auto;
+}
+
+.category-item {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  transition: 0.3s;
+}
+
+.category-item:hover {
+  background: #ff0066;
+  color: white;
+  transform: scale(1.03);
+}
+
+/* ===== LOGO EFFECT ===== */
+header img.logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  transition: all 0.4s ease-in-out;
+  filter: brightness(1.6) contrast(1.2);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 15px rgba(255, 200, 0, 0.4),
+    0 0 25px rgba(255, 200, 0, 0.3);
+    position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+header img.logo:hover {
+  transform: scale(2.5);
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.8),
+    0 0 25px rgba(255, 200, 0, 0.5);
+}
+
+/* ===== FOOTER LOGO ===== */
+.bottom-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 20px;
+}
+
+.bottom-logo img.footer-logo {
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+  transition: all 0.4s ease-in-out;
+  filter: brightness(1.6) contrast(1.2);
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.6),
+    0 0 25px rgba(255, 200, 0, 0.4),
+    0 0 40px rgba(255, 200, 0, 0.2);
+}
+
+.bottom-logo img.footer-logo:hover {
+  transform: scale(3);
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.8),
+    0 0 35px rgba(255, 200, 0, 0.5);
+}
+/* ======================================= */
+/* ===== MOBILE RESPONSIVENESS (< 600px) ===== */
+/* ======================================= */
+@media (max-width: 600px) {
+
+  /* 1. Overall Layout Adjustments */
+  header {
+    padding: 10px;
+    padding-top: 80px; /* Make space for logo/menu at the top */
+  }
+
+  /* 2. Header and Logo Alignment */
+  .logo {
+    top: 10px;
+    left: 10px;
+    width: 50px; /* Smaller logo */
+    height: 50px;
+  }
+  
+  header h1 {
+      /* This rule will override the inline style for h1 on mobile */
+      font-size: 1.5em !important; 
+      margin-left: 65px !important; /* Adjust margin for smaller logo */
+      text-align: left !important;
+      padding-right: 50px !important; /* Ensure text wraps */
+      white-space: normal; /* Allow text to wrap */
+  }
+
+  /* 3. Confession Box and Buttons */
+  .confession-box {
+    width: 80%; /* Make it almost full width on mobile */
+    margin: 15px auto;
+    padding: 15px;
+  }
+  
+  .button-group {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between buttons */
+  }
+
+  .confession-box button {
+    width: 100%; /* Make buttons full width */
+    font-size: 0.9em;
+    padding: 12px 0;
+  }
+  
+  /* 4. Confessions List */
+  .confessions-list {
+    width: 95%; /* Adjust width for better use of screen space */
+    margin: 15px auto;
+  }
+  
+  /* 5. Mobile Recording Button (Optional: make it smaller) */
+  #openRecorderBtn {
+      padding: 10px 15px !important;
+      font-size: 0.9rem !important;
+      bottom: 15px !important;
+      right: 15px !important;
+  }
+
+}
+/* Styling for the main confession input box */
+#confessionText {
+  width: 100%; /* Make it fill the parent container (the form) */
+  box-sizing: border-box; /* Crucial: Ensures padding and border are included in the 100% width */
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 3em;
+  resize: vertical; 
+  height: 150px; /* Default height */
+}
+
+/* Ensure the textarea focuses correctly */
+#confessionText:focus {
+  outline: none;
+  border-color: #ff66cc; /* Highlight border on focus */
+  box-shadow: 0 0 10px rgba(255, 102, 204, 0.5);
+}
+/* User Icon and Username Container */
+#userNameDisplayer { 
+    /* Crucial: Takes it out of the normal flow */
+    position: absolute; 
+    
+    /* Anchors it to the top right of the header */
+    top: 15px; 
+    right: 100px; /* Leave space for the hamburger menu */
+    
+   
+    
+    /* Ensure it stays above the centered title text */
+    z-index: 10; 
+    
+    /* Styling for mobile visibility */
+    font-size: 0.9em;
+    padding: 5px;
+}
+/* Hamburger Menu Button */
+.hamburger-menu {
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 10;
+
+}
